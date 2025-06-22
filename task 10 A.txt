@@ -1,0 +1,20 @@
+PS /home/atul> # 1. Get the backup policy
+PS /home/atul> $policy = Get-AzRecoveryServicesBackupProtectionPolicy -Name "DefaultPolicy"
+PS /home/atul> 
+PS /home/atul> # 2. Clear existing schedule times
+PS /home/atul> $policy.SchedulePolicy.ScheduleRunTimes.Clear()
+PS /home/atul> 
+PS /home/atul> # 3. Add 9:30 PM UTC (which is 3:00 AM IST)
+PS /home/atul> $policy.SchedulePolicy.ScheduleRunTimes.Add((Get-Date "21:30").ToUniversalTime())
+PS /home/atul> 
+PS /home/atul> # 4. Set the correct timezone to IST (MUST be valid Windows timezone string)
+PS /home/atul> $policy.SchedulePolicy.ScheduleRunTimeZone = [System.TimeZoneInfo]::FindSystemTimeZoneById("India Standard Time").Id
+PS /home/atul> 
+PS /home/atul> # 5. Apply the policy again
+PS /home/atul> Set-AzRecoveryServicesBackupProtectionPolicy -Policy $policy
+
+WorkloadName     Operation            Status               StartTime                 EndTime                   JobID
+------------     ---------            ------               ---------                 -------                   -----
+myVM             ConfigureBackup      Completed            6/22/2025 1:16:12 PM      6/22/2025 1:16:14 PM      8ead0ea0-3134-420c-88ba-6d9bcc241d9b
+
+PS /home/atul> 

@@ -1,0 +1,21 @@
+# Define required values
+$resourceGroup = "rg-powershell"
+$location = "eastus"
+$actionGroupName = "myActionGroup"
+$email = "atul.singh@example.com"  # ✅ Replace with your real email
+
+# Create the Action Group with Email Receiver
+$actionGroup = New-AzActionGroup -Name $actionGroupName `
+  -ResourceGroupName $resourceGroup `
+  -ShortName "AGEmail" `
+  -Location $location `
+  -EmailReceiver @(
+      @{
+        Name = "EmailAlertReceiver";
+        EmailAddress = $email;
+        UseCommonAlertSchema = $true
+      }
+  )
+
+# Get VM and its Resource ID
+$vm = Get-AzVM -Name "myVM" -Resource
